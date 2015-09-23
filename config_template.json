@@ -1,0 +1,5 @@
+{
+    "MAIL_URL": "<EMAILER-URL>",
+    "SENDER": "<SENDER-EMAIL-ADDRESS>",
+    "MG_API": "<MAILGUN-API-KEY>"
+}

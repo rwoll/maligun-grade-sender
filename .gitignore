@@ -1,0 +1,5 @@
+config.json
+students.csv
+
+# System files
+.DS_Store
