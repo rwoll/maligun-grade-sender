@@ -4,6 +4,11 @@ Mailgun Email Sender
 ## Usage
 
 1. Setup config file with appropriate credentials and rename `config.json`.
+   (You'll need a a free mailgun account.)[https://mailgun.com/]
+
+   > Tip: In the config file for the sender email, provide it in the
+   > following format: `Your Name <example@example.com>`.
+   
 2. Edit `message.txt/message.txt` to contain a message to appear in the body
    of each email.
 3. Make a `csv` file for recipients named `students.csv` in the
