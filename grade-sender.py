@@ -3,19 +3,43 @@
 import requests
 import json
 import csv
+import argparse
 
 def main():
+    # CLI
+    parser = argparse.ArgumentParser()
+    parser.add_argument("subject",
+                        help="subject of email to be sent to all students")
+    parser.add_argument("file",
+                        help="name of file to be sent to all students with ext.")
+    parser.add_argument("--config",
+                        help="path to config file")
+    parser.add_argument("--roster",
+                        help="path to csv file with roser")
+    parser.add_argument("--message",
+                        help="path to .txt file with message for everyone")
+
+    args = parser.parse_args()
 
     # preliminary settings
     cur_dir = '.'
     message_text = cur_dir + '/message.txt'
-    csv_path = cur_dir + '/students.csv'
-    desired_file = raw_input('Desired File (including extension): ')
-    subject = raw_input('Email Subject: ')
+    csv_path = cur_dir + '/students.csv' 
+    config_path = cur_dir + '/config.json'                                                                                                                 
+    desired_file = args.file
+    subject = args.subject
     recipients = {}
 
+    # check optional arguments
+    if (args.config != None):
+        config_path = args.config
+    if (args.roster != None):
+        csv_path = args.roster
+    if (args.message != None):
+        message_text = args.message
+
     # get config file
-    with open(cur_dir + '/config.json') as config_file:
+    with open(config_path) as config_file:
          data = json.load(config_file)
 
     # get standard message to be included in body of email
@@ -30,6 +54,7 @@ def main():
 
     # send emails if user confirms
     if (raw_input('Type confirm to send emails:') == 'confirm'):
+        print "confirm"
         send_all(data, recipients, subject, message_text, desired_file, cur_dir)
 
 # generate file path for directory structure
