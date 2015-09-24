@@ -27,9 +27,10 @@ $ pip install requests
      their email address.
   2. Add a `config.json` file to the working directory. ([See a template here](/working_directory/config_template.json).)
      
-     > You will need a free Mailgun account for the API credentials.
-     > **Tip:** In the config file for the sender email, provide it in the
-     > following format: `Your Name <example@example.com>`.
+     > [You will need a free Mailgun account for the API credentials.](https://mailgun.com/)
+     >
+     > **Tip:** In the `config.json` file for the `"SENDER"` field, provide it in the
+     > following format: `Your Name <example@example.com>` (including the pointy brackets).
   3. Add a `message.txt` whose contents will be copied into the body of each'
      sent email.
   4. Add a folder for each student with a standard naming convention. Here is
