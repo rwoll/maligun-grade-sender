@@ -4,6 +4,7 @@ import requests
 import json
 import csv
 import argparse
+import os
 
 def main():
     # CLI
@@ -15,20 +16,25 @@ def main():
     parser.add_argument("--config",
                         help="path to config file")
     parser.add_argument("--roster",
-                        help="path to csv file with roser")
+                        help="path to csv file with roster")
     parser.add_argument("--message",
                         help="path to .txt file with message for everyone")
+    parser.add_argument("--directory",
+                        help="directory to look for files")
 
     args = parser.parse_args()
 
     # preliminary settings
-    cur_dir = '.'
-    message_text = cur_dir + '/message.txt'
-    csv_path = cur_dir + '/students.csv' 
-    config_path = cur_dir + '/config.json'                                                                                                                 
+    cur_dir = os.getcwd()
+    message_text = os.path.join(cur_dir, '/message.txt')
+    csv_path = os.path.join(cur_dir, '/students.csv')
+    config_path = os.path.join(cur_dir, '/config.json')
+    file_directory = cur_dir
     desired_file = args.file
     subject = args.subject
     recipients = {}
+
+
 
     # check optional arguments
     if (args.config != None):
@@ -37,6 +43,8 @@ def main():
         csv_path = args.roster
     if (args.message != None):
         message_text = args.message
+    if (args.directory != None):
+        file_directory = args.directory
 
     # get config file
     with open(config_path) as config_file:
@@ -45,21 +53,21 @@ def main():
     # get standard message to be included in body of email
     with open (message_text, "r") as message_file:
         message_text = message_file.read().replace('\n', '')
-    
+
     # get students and emails
     recipients = csv_parser(csv_path)
 
     # check to see if the files are going to be good
-    recipients = check_batch(recipients, desired_file, cur_dir)[0]
+    recipients = check_batch(recipients, desired_file, file_directory)[0]
 
     # send emails if user confirms
-    if (raw_input('Type confirm to send emails:') == 'confirm'):
+    if (raw_input('Type confirm to send emails:').lower() == 'confirm'):
         print "confirm"
-        send_all(data, recipients, subject, message_text, desired_file, cur_dir)
+        send_all(data, recipients, subject, message_text, desired_file, file_directory)
 
 # generate file path for directory structure
 def make_path(the_file, user, directory):
-    return directory + '/' + user + '/' + the_file
+    return os.path.join(directory, user, the_file)
 
 # get user and email addresses form CSV into a dictionary
 def csv_parser(file_path):
@@ -77,7 +85,7 @@ def check_batch(recipients, desired_file, parent_directory):
 
     # try opening each file that we are going to send
     for user, email in recipients.iteritems():
-        try: 
+        try:
             with open(make_path(desired_file, user, parent_directory)) as attachment:
                 succeed_recipients[user] = email
         except IOError:
@@ -104,7 +112,7 @@ def send_grade(sender_info, recipient, subject, message, attachment):
               'to': recipient,
               'subject': subject,
               'text': message})
-    
+
 # send emails to all students
 def send_all(sender_info, recipients, subject, message, desired_file, parent_directory):
     print "Sending..."
