@@ -26,9 +26,9 @@ def main():
 
     # preliminary settings
     cur_dir = os.getcwd()
-    message_text = os.path.join(cur_dir, '/message.txt')
-    csv_path = os.path.join(cur_dir, '/students.csv')
-    config_path = os.path.join(cur_dir, '/config.json')
+    message_text = os.path.join(cur_dir, 'working_directory', 'message.txt')
+    csv_path = os.path.join(cur_dir, 'working_directory', 'students.csv')
+    config_path = os.path.join(cur_dir, 'working_directory', 'config.json')
     file_directory = cur_dir
     desired_file = args.file
     subject = args.subject
